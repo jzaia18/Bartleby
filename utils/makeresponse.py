@@ -19,8 +19,11 @@ def get_gpt_response(prompt):
 
     return response
 
-def get_response_text(response):
+def get_text_from(response):
     return response['choices'][0]['text']
+
+def get_gpt_response_text(prompt):
+    return get_text_from(get_gpt_response(prompt))
 
 #TODO, if we want to moderate responses
 def get_moderated_text(response):
@@ -39,5 +42,5 @@ def get_moderated_text(response):
 if __name__ == '__main__':
     r = get_gpt_response(input())
 
-    print(get_response_text(r))
+    print(get_text_from(r))
     #print(get_moderated_text(r))
