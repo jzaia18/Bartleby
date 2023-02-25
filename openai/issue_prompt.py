@@ -8,10 +8,10 @@ with open(SECRET_KEY_LOCATION) as f:
 
 def get_gpt_response(prompt):
     response = openai.Completion.create(
-        model="text-davinci-002",
+        model="text-curie-001",
         prompt=prompt,
         temperature=0.9,
-        max_tokens=150,
+        max_tokens=250,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0.6,
