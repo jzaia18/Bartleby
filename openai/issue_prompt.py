@@ -22,7 +22,22 @@ def get_gpt_response(prompt):
 def get_response_text(response):
     return response['choices'][0]['text']
 
+#TODO, if we want to moderate responses
+def get_moderated_text(response):
+    text = get_response_text(response)
+
+    print(text)
+
+    response = openai.Moderation.create(
+        input=text
+    )
+    output = response["results"][0]
+
+    print(output)
+    return output
+
 if __name__ == '__main__':
     r = get_gpt_response(input())
 
     print(get_response_text(r))
+    #print(get_moderated_text(r))
