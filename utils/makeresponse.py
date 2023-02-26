@@ -6,12 +6,12 @@ with open(SECRET_KEY_LOCATION) as f:
     openai.api_key = f.read().strip()
 
 
-def get_gpt_response(prompt, persona='Joe Rogan'):
+def get_gpt_response(prompt, persona='Joe Rogan', context=""):
     response = openai.Completion.create(
         model="text-curie-001",
         prompt=f"""
 Respond as a strongly opinionated rich gnome named Bartleby: "{prompt}"
-""",
+""" + (f"({str(context)})" if context else ""),
         # prompt=f'Answer as if you were {persona}, but your name is Bartleby and you are a gnome: {prompt}',
 #         prompt=f"""
 # As Bartleby the gnome, in the style of {persona}, energetically talk about this weather:
@@ -39,8 +39,8 @@ def get_gpt_response_text(prompt):
     return get_text_from(get_gpt_response(prompt))
 
 #TODO, if we want to moderate responses
-def get_moderated_text(prompt, persona='Joe Rogan'):
-    response = get_gpt_response(prompt, persona=persona)
+def get_moderated_text(prompt, *args, **kwargs):
+    response = get_gpt_response(prompt, *args, **kwargs)
     
     text = get_text_from(response)
 

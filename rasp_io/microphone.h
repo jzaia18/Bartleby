@@ -8,3 +8,7 @@
 #include <unistd.h>
 
 #include "wav.h"
+
+#define READ_SIZE 255
+#define WAV_SIZE 230400
+#define BYTE_MAX 500000
