@@ -25,6 +25,10 @@ if __name__ == '__main__':
     response = get_moderated_text(text)
     if response == None:
         print('Canceled!')
+        play_tts(get_stall_text('../audiofiles/canceled_messages'))
+
+        while mixer.music.get_busy():  # wait for music to finish playing
+            sleep(1)
         exit()
     
     print(response)
