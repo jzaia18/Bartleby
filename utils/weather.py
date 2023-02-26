@@ -59,7 +59,11 @@ def getPrecipChance(forecastObj: dict) -> int:
     return forecastObj['probabilityOfPrecipitation']['value'] or 0
 
 def getWindSpeed(forecastObj: dict) -> float:
-    start, end = forecastObj['windSpeed'].split(" to ")
+    if " to " in forecastObj['windSpeed']:
+        start, end = forecastObj['windSpeed'].split(" to ")
+    else:
+        end = forecastObj['windSpeed']
+        start = end[:-4]
     start = float(start)
     end = float(end[:-4])
     return (start + end) / 2
@@ -69,6 +73,7 @@ def forecastFromLocation(location: str):
     dbg(f"{(latLon := getLatLon(location)) = }")
     dbg(f"{(pt := getWeatherPoint(*latLon)) = }")
     dbg(f"{(forecast := getForecast(*pt)) = }")
+    dbg(f"{(wind := getWindSpeed(forecast)) = }")
     return forecast
     
 

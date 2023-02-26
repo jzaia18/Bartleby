@@ -54,7 +54,7 @@ if __name__ == '__main__':
         
     elif (match := re.search(TIME_PATTERN, text)):
         context = "Rephrase the following using strong idioms: It is currently " + \
-            datetime.now().strftime('%H:%M %p')
+            datetime.now().strftime('%I:%M %p')
         
         
         # text = "Comment strongly about the current time of day."
