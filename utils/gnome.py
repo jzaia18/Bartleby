@@ -1,6 +1,6 @@
 from voice import *
 from tts import *
-from makeresponse import get_gpt_response_text
+from makeresponse import get_moderated_text
 from pygame import mixer
 import os, random
 
@@ -14,9 +14,13 @@ if __name__ == '__main__':
 
     text = input()
 
-    response = get_gpt_response_text(text)
+    response = get_moderated_text(text)
+    if response == None:
+        print('Canceled!')
+        exit()
+    
+    print(response)
     play_tts(get_stall_text('../audiofiles/stalling_messages'))
-    print('A:', response)
 
     get_tts(response)
     while mixer.music.get_busy():  # wait for music to finish playing
