@@ -11,7 +11,7 @@ with open(API_KEY_LOCATION) as f:
     API_KEY = f.read().strip()
 
 def get_tts(text, response_loc='response.mp3'):
-    url = 'https://api.elevenlabs.io/v1/text-to-speech/t1u89Py5jDQcxymSnrch'
+    url = 'https://api.elevenlabs.io/v1/text-to-speech/804a4260e9c51c8223e68444f76ef1b7'
     headers = {'accept': 'audio/mpeg', 'xi-api-key': API_KEY, 'Content-Type': 'application/json'}
     data = {
         "text": text,
