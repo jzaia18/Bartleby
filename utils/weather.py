@@ -43,7 +43,7 @@ def getForecast(gridId: str, gridX: int, gridY: int) -> str:
     
     if 'properties' not in response:
         dbg(f"{response}")
-        return "I'm sorry, I don't know what the forecast is."
+        return "I don't know what the forecast is."
     
     return response["properties"]["periods"][0]["detailedForecast"]
 
