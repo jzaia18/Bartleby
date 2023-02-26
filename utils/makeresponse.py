@@ -8,7 +8,7 @@ with open(SECRET_KEY_LOCATION) as f:
 
 def get_gpt_response(prompt, persona='Joe Rogan', context=""):
     response = openai.Completion.create(
-        model="text-curie-001",
+        model="text-davinci-003",
         prompt=f"""
 Respond as a strongly opinionated rich gnome named Bartleby: "{prompt}"
 """ + (f"({str(context)})" if context else ""),
