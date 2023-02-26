@@ -28,24 +28,33 @@ def record_audio(duration, verbose=False):
     sleep(1)
 
 
-def wait_for_wake(wakeWords, duration, verbose=False):
+def wait_for_wake(wakeWords, duration, recordingCache, verbose=False):
     if verbose:
         print("Waiting for Wake")
-    
-    recordingCache = sd.rec(int(duration * FS), samplerate=FS, channels=2)
+
+    if recordingCache:
+        recordingCache.append(sd.rec(int(duration * FS), samplerate=FS, channels=2))
+    else: 
+        recordingCache = sd.rec(int(duration * FS), samplerate=FS, channels=2)
+
     sd.wait()
     wv.write("recordingCache.wav", recordingCache, FS, sampwidth=4)
+    
+    if len(recordingCache > 10*FS*duration):
+        recordingCache = recordingCache[FS*duration:]
+
     response = convert_wav_to_text(fname="recordingCache.wav")
     
     if(response):
-        for word in response.split(" "):
+        response = response.split(" ")
+        for i, word in enumerate(response):
             print(word)
             if word in wakeWords:
                 if(verbose):
                     print("wake word found!")
-                return 0
+                return 0, " ".join(response[i:])
     
-    return 1
+    return 1, recordingCache
 
 
 # Reading Audio file as source
@@ -69,11 +78,13 @@ def convert_wav_to_text(fname='recording1.wav', verbose=False):
 
 
 if __name__ == '__main__':
-    wakeWords = ["bartleby", "hey", "servant"]
+    wakeWords = ["bartleby", "hey", "servant", "listen"]
+    recordingCache = []
 
     while(True):
-        if(wait_for_wake(wakeWords, 1) == 0):
+        result, recordingCache = wait_for_wake(wakeWords, 1, recordingCache)
+        if(result == 0):
             record_audio(8)
-            print(convert_wav_to_text())
-        else:
-            sleep(.05)
+            print(recordingCache + " " + convert_wav_to_text())
+            recordingCache = []
+     
