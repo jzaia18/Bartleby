@@ -1,5 +1,9 @@
 #include "microphone.h" 
 
+const int READ_SIZE = 256 * sizeof(short);
+const int WAV_SIZE = 115200 * sizeof(short);
+
+
 struct termios tty;
 
 int main(int argc, char* argv[])
@@ -45,26 +49,23 @@ int main(int argc, char* argv[])
     }
 
     // Allocate memory for read buffer, set size according to your needs
-    short read_buf[256] = { 0 };
-    short final_read[115200] = { 0 };
-    int cursor = 0; 
+    
+    char final_read[WAV_SIZE] = { 0 };
+    int cursor = 0;
 
     // Read bytes. The behaviour of read() (e.g. does it block?,
     // how long does it block for?) depends on the configuration
     // settings above, specifically VMIN and VTIME
     int n, i;
 
-    while(cursor < (115200 - 256))
+    while(cursor < WAV_SIZE - READ_SIZE)
     {
-        n = read(serial_port, &read_buf, sizeof(read_buf));
-
-        for(i=0; i < n; i++)
-            final_read[i+cursor] = read_buf[i];
+        n = read(serial_port, final_read + cursor, READ_SIZE);
         
         cursor += n; 
     }
 
-    write_wav("test.wav", n, final_read, 115200);
+    write_wav("test.wav", n, (short*)final_read, 115200);
     
     close(serial_port);
 
