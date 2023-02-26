@@ -1,3 +1,4 @@
+import sphinxbase
 from pocketsphinx import LiveSpeech
 
 speech = LiveSpeech(lm=False, keyphrase='Bartleby', kws_threshold=1e-20)
