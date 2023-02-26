@@ -9,7 +9,10 @@ with open(SECRET_KEY_LOCATION) as f:
 def get_gpt_response(prompt, persona='Joe Rogan'):
     response = openai.Completion.create(
         model="text-curie-001",
-        prompt=f'Answer as if you were {persona}, but your name is Bartleby and you are a gnome: {prompt}',
+        prompt=f"""
+Respond with the style and opinions of {persona}, except as Bartleby the gnome:
+{prompt}
+""",
         temperature=0.9,
         max_tokens=250,
         top_p=1,
