@@ -19,20 +19,19 @@ if __name__ == '__main__':
     if (match := re.search(WEATHER_PATTERN, text)):
         text = forecastFromLocation(match.group(1) or 'Rochester, NY')
         print("Weather forecast:", repr(text))
-        
-    stalling = play_tts(get_stall_text('../audiofiles/stalling_messages'))
+    
 
     response = get_moderated_text(text)
     if response == None:
         print('Canceled!')
-        
-        wait_tts(stalling)
         
         wait_tts(play_tts(get_stall_text('../audiofiles/canceled_messages')))
         
         exit()
     
     print(response)
+    
+    stalling = play_tts(get_stall_text('../audiofiles/stalling_messages'))
 
     get_tts(response)
     
