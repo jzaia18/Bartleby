@@ -43,13 +43,13 @@ def getForecast(gridId: str, gridX: int, gridY: int) -> str:
     
     if 'properties' not in response:
         dbg(f"{response}")
-        return "I'm sorry, I don't know what the forecast is."
+        return "I don't know what the forecast is."
     
     return response["properties"]["periods"][0]["detailedForecast"]
 
 
 # full process
-def forecastFromlocation(location: str) -> str:
+def forecastFromLocation(location: str) -> str:
     dbg(f"{(latLon := getLatLon(location)) = }")
     dbg(f"{(pt := getWeatherPoint(*latLon)) = }")
     dbg(f"{(forecast := getForecast(*pt)) = }")
@@ -59,4 +59,4 @@ def forecastFromlocation(location: str) -> str:
 if __name__ == '__main__':
     while True:
         inputLoc = input()
-        print(forecastFromlocation(inputLoc))
+        print(forecastFromLocation(inputLoc))
