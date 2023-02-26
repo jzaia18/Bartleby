@@ -8,20 +8,42 @@ import sounddevice as sd
 from time import sleep
 import wavio as wv
 
+FS = 44100
 
 # For testing
-def record_audio(verbose=False):
-    fs = 44100  # Sample rate
-    seconds = 6  # Duration of recording
+def record_audio(duration, verbose=False):
+    fs = FS  # Sample rate
+    seconds = duration  # Duration of recording
     if verbose:
         print('recording!')
     myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2)
     sd.wait()  # Wait until recording is finished
     if verbose:
         print('finished')
-    write('output.wav', fs, myrecording)  # Save as WAV file
+    #write('output.wav', fs, myrecording)  # Save as WAV file
     wv.write("recording1.wav", myrecording, fs, sampwidth=4)
     sleep(1)
+
+
+def wait_for_wake(wakeWords, duration, verbose=False):
+    fs = FS
+    if verbose:
+        print("Waiting for Wake")
+    
+    recordingCache = sd.rec(int(duration * fs), samplerate=fs, channels=2)
+    sd.wait()
+    wv.write("recordingCache.wav", recordingCache, fs, sampwidth=4)
+    response = convert_wav_to_text(fname="recordingCache.wav")
+    
+    if(response):
+        for word in response.split(" "):
+            print(word)
+            if word in wakeWords:
+                if(verbose):
+                    print("wake word found!")
+                return 0
+    
+    return 1
 
 
 # Reading Audio file as source
@@ -47,5 +69,11 @@ def convert_wav_to_text(fname='recording1.wav', verbose=False):
 
 
 if __name__ == '__main__':
-    record_audio(verbose=True)
-    print(convert_wav_to_text(verbose=True))
+    wakeWords = ["bartleby", "hey", "servant"]
+
+    while(True):
+        if(wait_for_wake(wakeWords, 3, verbose=True) == 0):
+            record_audio(15, verbose=True)
+            print(convert_wav_to_text(verbose=True))
+        else:
+            sleep(.1)
