@@ -56,7 +56,7 @@ def getTemp(forecastObj: dict) -> int:
     return forecastObj['temperature']
 
 def getPrecipChance(forecastObj: dict) -> int:
-    return forecastObj['probabilityOfPrecipitation']['value']
+    return forecastObj['probabilityOfPrecipitation']['value'] or 0
 
 def getWindSpeed(forecastObj: dict) -> float:
     start, end = forecastObj['windSpeed'].split(" to ")
