@@ -4,6 +4,7 @@ from makeresponse import get_moderated_text
 import os, random
 from weather import forecastFromLocation, getDetails, getTemp, getPrecipChance, getWindSpeed
 import re
+from sys import argv
 from datetime import datetime
 
 WEATHER_PATTERN = re.compile(
@@ -15,6 +16,9 @@ def get_random_voice(directory='audiofiles/stalling_messages'):
     return directory + '/' + random.choice(os.listdir(directory))
 
 if __name__ == '__main__':
+    
+    silent = '--silent' in argv
+    
     # text = convert_wav_to_text()
     # print('Q:',text)
 
@@ -85,14 +89,14 @@ if __name__ == '__main__':
         exit()
     
 
-    get_tts(response)
+    if not silent: get_tts(response)
     
     wait_tts(stalling)
     
     print(response)
     response = response.replace(" mph", " miles per hour")
     response = response.replace("°", " degrees")
-    wait_tts(play_tts())
+    if not silent: wait_tts(play_tts())
     
     # mixer.music.load('response.mp3')
     # mixer.music.play()
