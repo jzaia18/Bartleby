@@ -23,7 +23,7 @@ if __name__ == '__main__':
         print("Weather forecast:", repr(text))
 
     response = get_gpt_response_text(text)
-    play_tts(get_stall_text('audiofiles/stalling_messages'))
+    play_tts(get_stall_text('../audiofiles/stalling_messages'))
     print('A:', response)
 
     get_tts(response)
