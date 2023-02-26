@@ -10,9 +10,19 @@ def get_gpt_response(prompt, persona='Joe Rogan'):
     response = openai.Completion.create(
         model="text-curie-001",
         prompt=f"""
-Respond with the style and opinions of {persona}, except as Bartleby the gnome:
-{prompt}
+Respond passionately as a gnome named Bartleby: "{prompt}"
 """,
+        # prompt=f'Answer as if you were {persona}, but your name is Bartleby and you are a gnome: {prompt}',
+#         prompt=f"""
+# As Bartleby the gnome, in the style of {persona}, energetically talk about this weather:
+# {prompt}
+# """,
+#         prompt=f"""
+# "{prompt}" as Bartleby the gnome, in the style of {persona}:
+# """,
+#         prompt=f"""
+# As Bartleby the gnome, tell me "{prompt}" in the style of {persona}.
+# """,
         temperature=0.9,
         max_tokens=250,
         top_p=1,
