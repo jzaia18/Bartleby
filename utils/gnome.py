@@ -77,6 +77,9 @@ if __name__ == '__main__':
     if response == None:
         print('Canceled!')
         
+        
+        wait_tts(stalling)
+        
         wait_tts(play_tts(get_random_voice('../audiofiles/canceled_messages')))
         
         exit()
