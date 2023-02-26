@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # text = convert_wav_to_text()
     # print('Q:',text)
 
-    text = input()
+    text = input("> ")
     
     if (match := re.search(WEATHER_PATTERN, text)):
         text = forecastFromLocation(match.group(1) or 'Rochester, NY')
