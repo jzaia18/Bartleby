@@ -71,6 +71,8 @@ if __name__ == '__main__':
     
     print(response)
     
+    response = response.replace(" mph", " miles per hour")
+    
     stalling = play_tts(stallFile)
 
     get_tts(response)
