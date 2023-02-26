@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     {
         n = read(serial_port, &read_buf, sizeof(read_buf));
 
-        for(i=0; i < cursor+n; i++)
+        for(i=0; i < n; i++)
             final_read[i+cursor] = read_buf[i];
         
         cursor += n; 
