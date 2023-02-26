@@ -4,7 +4,7 @@
 
 import requests
 from time import sleep
-from subprocess import Popen
+from subprocess import Popen, DEVNULL
 
 API_KEY_LOCATION = 'joerogansecrets.txt'
 with open(API_KEY_LOCATION) as f:
@@ -25,7 +25,7 @@ def get_tts(text, response_loc='response.mp3'):
         f.write(r.content)
 
 def play_tts(fname='response.mp3'):
-    return Popen(["cvlc", "--play-and-exit", fname])
+    return Popen(["cvlc", "--play-and-exit", fname], stdout=DEVNULL, stderr=DEVNULL)
 
 
 def wait_tts(tts_obj):
