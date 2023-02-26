@@ -11,7 +11,7 @@ r'\b(?:weather|temperature)\b(?:.+\bin ((?:\W*\b(?!right|now)\w+\b){1,3}\b))?', 
 TIME_PATTERN = re.compile(r'\b(:?what|tell me)\b.*\btime\b', re.I)
 
 
-def get_stall_text(directory='audiofiles/stalling_messages'):
+def get_random_voice(directory='audiofiles/stalling_messages'):
     return directory + '/' + random.choice(os.listdir(directory))
 
 if __name__ == '__main__':
@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     context = ""
     text = input("> ")
-    stallFile = get_stall_text('../audiofiles/stalling_messages')
+    stallFile = get_random_voice('../audiofiles/stalling_messages')
     
     if (match := re.search(WEATHER_PATTERN, text)):
         forecastObj = forecastFromLocation((match.group(1) or 'Rochester, NY').strip())
@@ -55,6 +55,11 @@ if __name__ == '__main__':
     elif (match := re.search(TIME_PATTERN, text)):
         context = "Rephrase the following using strong idioms: It is currently " + \
             datetime.now().strftime('%I:%M %p')
+
+    elif 'joke' in text.lower() and 'about' not in text.lower():
+        wait_tts(play_tts(get_random_voice('../audiofiles/jokes')))
+        exit()
+
         
         
         # text = "Comment strongly about the current time of day."
@@ -65,7 +70,7 @@ if __name__ == '__main__':
     if response == None:
         print('Canceled!')
         
-        wait_tts(play_tts(get_stall_text('../audiofiles/canceled_messages')))
+        wait_tts(play_tts(get_random_voice('../audiofiles/canceled_messages')))
         
         exit()
     
