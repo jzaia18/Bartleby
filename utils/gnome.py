@@ -84,16 +84,14 @@ if __name__ == '__main__':
         
         exit()
     
-    print(response)
-    
-    response = response.replace(" mph", " miles per hour")
-    response = response.replace("°", " degrees")
-    
 
     get_tts(response)
     
     wait_tts(stalling)
     
+    print(response)
+    response = response.replace(" mph", " miles per hour")
+    response = response.replace("°", " degrees")
     wait_tts(play_tts())
     
     # mixer.music.load('response.mp3')
