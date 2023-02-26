@@ -60,6 +60,9 @@ if __name__ == '__main__':
         wait_tts(play_tts(get_random_voice('../audiofiles/jokes')))
         exit()
 
+    elif 'news' in text.lower():
+        wait_tts(play_tts(get_random_voice('../audiofiles/news_messages')))
+        exit()
         
         
         # text = "Comment strongly about the current time of day."
