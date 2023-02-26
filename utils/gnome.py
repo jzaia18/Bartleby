@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 
 WEATHER_PATTERN = re.compile(
-r'\b(?:weather|temperature)\b(?:.+\bin ((?:\W*\b(?!right|now)\w+\b){1,2}\b))?', re.I)
+r'\b(?:weather|temperature)\b(?:.+\bin ((?:\W*\b(?!right|now)\w+\b){1,3}\b))?', re.I)
 TIME_PATTERN = re.compile(r'\b(:?what|tell me)\b.*\btime\b', re.I)
 
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
             context = "Do not respond."
         else:
             details = getDetails(forecastObj)
-            context = "Embellish the following, using exact numbers: " + details
+            context = 'Restate with precise numbers: "' + details + '"'
             # text = "Comment strongly about the weather."
             
             if getPrecipChance(forecastObj) >= 90:
@@ -72,6 +72,7 @@ if __name__ == '__main__':
     print(response)
     
     response = response.replace(" mph", " miles per hour")
+    response = response.replace("°", " degrees")
     
     stalling = play_tts(stallFile)
 
