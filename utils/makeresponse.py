@@ -10,7 +10,7 @@ def get_gpt_response(prompt, persona='Joe Rogan'):
     response = openai.Completion.create(
         model="text-curie-001",
         prompt=f"""
-Respond as an energetic forest gnome named Bartleby: "{prompt}"
+Respond as a strongly opinionated rich gnome named Bartleby: "{prompt}"
 """,
         # prompt=f'Answer as if you were {persona}, but your name is Bartleby and you are a gnome: {prompt}',
 #         prompt=f"""
