@@ -8,7 +8,7 @@ from datetime import datetime
 
 WEATHER_PATTERN = re.compile(
 r'\b(?:weather|temperature)\b(?:.+\bin ((?:\W*\b(?!right|now)\w+\b){1,3}\b))?', re.I)
-TIME_PATTERN = re.compile(r'\b(:?what|tell me)\b.*\btime\b', re.I)
+TIME_PATTERN = re.compile(r'^(:?can|what|tell me)\b.*\btime\b(?!.*\bdo)', re.I)
 
 
 def get_random_voice(directory='audiofiles/stalling_messages'):
@@ -26,8 +26,8 @@ if __name__ == '__main__':
         forecastObj = forecastFromLocation((match.group(1) or 'Rochester, NY').strip())
         
         if forecastObj is None:
-            stallFile = 'unsure'
-            context = "Do not respond."
+            wait_tts(play_tts('../audiofiles/weather_messages/unsure.mp3'))
+            exit()
         else:
             details = getDetails(forecastObj)
             context = 'Restate with precise numbers: "' + details + '"'
@@ -53,18 +53,25 @@ if __name__ == '__main__':
         
         
     elif (match := re.search(TIME_PATTERN, text)):
-        context = "Rephrase the following using strong idioms: It is currently " + \
-            datetime.now().strftime('%I:%M %p')
+        context = "Restate with strong idioms: \"It is currently " + \
+            datetime.now().strftime('%I:%M %p') + '"'
+        # context = "Rephrase the following using strong idioms: It is currently " + \
+        #     datetime.now().strftime('%I:%M %p')
 
     elif 'joke' in text.lower() and 'about' not in text.lower():
         wait_tts(play_tts(get_random_voice('../audiofiles/jokes')))
         exit()
 
+    elif 'news' in text.lower():
+        wait_tts(play_tts(get_random_voice('../audiofiles/news_messages')))
+        exit()
         
         
         # text = "Comment strongly about the current time of day."
 
     print(context)
+    
+    stalling = play_tts(stallFile)
     
     response = get_moderated_text(text, context=context)
     if response == None:
@@ -79,7 +86,6 @@ if __name__ == '__main__':
     response = response.replace(" mph", " miles per hour")
     response = response.replace("°", " degrees")
     
-    stalling = play_tts(stallFile)
 
     get_tts(response)
     
