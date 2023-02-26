@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     context = ""
     text = input("> ")
-    stallFile = get_stall_text('../audiofiles/canceled_messages')
+    stallFile = get_stall_text('../audiofiles/stalling_messages')
     
     if (match := re.search(WEATHER_PATTERN, text)):
         forecastObj = forecastFromLocation((match.group(1) or 'Rochester, NY').strip())
