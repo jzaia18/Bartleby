@@ -72,6 +72,7 @@ if __name__ == '__main__':
     print(response)
     
     response = response.replace(" mph", " miles per hour")
+    response = response.replace("°", " degrees")
     
     stalling = play_tts(stallFile)
 
