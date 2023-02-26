@@ -65,13 +65,13 @@ if __name__ == '__main__':
     if response == None:
         print('Canceled!')
         
-        wait_tts(play_tts(stallFile))
+        wait_tts(play_tts(get_stall_text('../audiofiles/canceled_messages')))
         
         exit()
     
     print(response)
     
-    stalling = play_tts(get_stall_text('../audiofiles/stalling_messages'))
+    stalling = play_tts(stallFile)
 
     get_tts(response)
     
