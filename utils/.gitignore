@@ -3,3 +3,4 @@ secrets.txt
 joerogansecrets.txt
 *.wav
 __pycache__/
+*.mp3
