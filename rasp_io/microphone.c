@@ -1,7 +1,6 @@
 #include "microphone.h" 
 
-const int READ_SIZE = 256 * sizeof(short);
-const int WAV_SIZE = 115200 * sizeof(short);
+
 
 
 struct termios tty;
@@ -39,7 +38,7 @@ int main(int argc, char* argv[])
     // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT IN LINUX)
     tty.c_cc[VTIME] = 100;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
     tty.c_cc[VMIN] = 255;
-    // Set in/out baud rate to be 9600
+    // Set in/out baud rate to be 1152000
     cfsetispeed(&tty, B115200);
     cfsetospeed(&tty, B115200);
 
@@ -50,23 +49,24 @@ int main(int argc, char* argv[])
 
     // Allocate memory for read buffer, set size according to your needs
     
-    char final_read[WAV_SIZE] = { 0 };
+    char final_read[READ_SIZE] = { 0 };
     int cursor = 0;
 
     // Read bytes. The behaviour of read() (e.g. does it block?,
     // how long does it block for?) depends on the configuration
     // settings above, specifically VMIN and VTIME
-    int n, i;
+    int n;
+    FILE* fptr = fopen("micbytes", "wb");
 
-    while(cursor < WAV_SIZE - READ_SIZE)
+    while(cursor < BYTE_MAX)
     {
-        n = read(serial_port, final_read + cursor, READ_SIZE);
-        
+        n = read(serial_port, final_read, READ_SIZE);
+        fwrite(&final_read, n, n, fptr);
         cursor += n; 
     }
 
-    write_wav("test.wav", n, (short*)final_read, 115200);
-    
+    fclose(fptr);
+
     close(serial_port);
 
 }
