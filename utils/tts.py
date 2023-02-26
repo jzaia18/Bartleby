@@ -24,14 +24,12 @@ def get_tts(text, response_loc='response.mp3'):
     with open(response_loc, 'wb') as f:
         f.write(r.content)
 
-def play_tts(fname='response.mp3', queue='False'):
+def play_tts(fname='response.mp3', queue=False):
     if queue:
         mixer.music.queue(fname)
         return
     mixer.music.load(fname)
     mixer.music.play()
-    while mixer.music.get_busy():  # wait for music to finish playing
-        sleep(1)
 
 if __name__ == '__main__':
     mixer.init()

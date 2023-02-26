@@ -20,6 +20,10 @@ if __name__ == '__main__':
 
     get_tts(response)
     play_tts(queue=True)
+
+    while mixer.music.get_busy():  # wait for music to finish playing
+        sleep(1)
+
     # mixer.music.load('response.mp3')
     # mixer.music.play()
     # while mixer.music.get_busy():  # wait for music to finish playing
