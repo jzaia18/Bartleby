@@ -49,7 +49,7 @@ def getForecast(gridId: str, gridX: int, gridY: int) -> str:
 
 
 # full process
-def forecastFromlocation(location: str) -> str:
+def forecastFromLocation(location: str) -> str:
     dbg(f"{(latLon := getLatLon(location)) = }")
     dbg(f"{(pt := getWeatherPoint(*latLon)) = }")
     dbg(f"{(forecast := getForecast(*pt)) = }")
@@ -59,4 +59,4 @@ def forecastFromlocation(location: str) -> str:
 if __name__ == '__main__':
     while True:
         inputLoc = input()
-        print(forecastFromlocation(inputLoc))
+        print(forecastFromLocation(inputLoc))
