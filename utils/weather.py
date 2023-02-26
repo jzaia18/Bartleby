@@ -73,7 +73,6 @@ def forecastFromLocation(location: str):
     dbg(f"{(latLon := getLatLon(location)) = }")
     dbg(f"{(pt := getWeatherPoint(*latLon)) = }")
     dbg(f"{(forecast := getForecast(*pt)) = }")
-    dbg(f"{(wind := getWindSpeed(forecast)) = }")
     return forecast
     
 
