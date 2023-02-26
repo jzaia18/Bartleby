@@ -5,8 +5,8 @@ import sys
 
 
 def dbg(*args, **kwargs):
-    pass
-    # print(*args, **kwargs, file=sys.stderr)
+    if __name__ == '__main__':
+        print(*args, **kwargs, file=sys.stderr)
 
 
 def getLatLon(address: str) -> Tuple[float, float]:
@@ -36,20 +36,36 @@ def getWeatherPoint(lat: float, lon: float) -> Tuple[str, int, int]:
     return (prop['gridId'], prop['gridX'], prop['gridY'])
 
 
-def getForecast(gridId: str, gridX: int, gridY: int) -> str:
+def getForecast(gridId: str, gridX: int, gridY: int):
     url = f"https://api.weather.gov/gridpoints/{gridId}/{gridX},{gridY}/forecast"
     
     response = requests.get(url).json()
     
     if 'properties' not in response:
         dbg(f"{response}")
-        return "I don't know what the forecast is."
+        return None
     
-    return response["properties"]["periods"][0]["detailedForecast"]
+    dbg(f"{response['properties']['periods'][0]}")
+    return response["properties"]["periods"][0]
 
+
+def getDetails(forecastObj: dict) -> str:
+    return forecastObj["detailedForecast"]
+
+def getTemp(forecastObj: dict) -> int:
+    return forecastObj['temperature']
+
+def getPrecipChance(forecastObj: dict) -> int:
+    return forecastObj['probabilityOfPrecipitation']['value']
+
+def getWindSpeed(forecastObj: dict) -> float:
+    start, end = forecastObj['windSpeed'].split(" to ")
+    start = float(start)
+    end = float(end[:-4])
+    return (start + end) / 2
 
 # full process
-def forecastFromLocation(location: str) -> str:
+def forecastFromLocation(location: str):
     dbg(f"{(latLon := getLatLon(location)) = }")
     dbg(f"{(pt := getWeatherPoint(*latLon)) = }")
     dbg(f"{(forecast := getForecast(*pt)) = }")
