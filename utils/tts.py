@@ -3,8 +3,8 @@
 # API caller for eleven labs to make chatgpt into a normal voice.
 
 import requests
-from pygame import mixer
 from time import sleep
+from subprocess import run
 
 API_KEY_LOCATION = 'joerogansecrets.txt'
 with open(API_KEY_LOCATION) as f:
@@ -24,14 +24,9 @@ def get_tts(text, response_loc='response.mp3'):
     with open(response_loc, 'wb') as f:
         f.write(r.content)
 
-def play_tts(fname='response.mp3', queue=False):
-    if queue:
-        mixer.music.queue(fname)
-        return
-    mixer.music.load(fname)
-    mixer.music.play()
+def play_tts(fname='response.mp3'):
+    run(["cvlc", "--play-and-exit", fname])
 
 if __name__ == '__main__':
-    mixer.init()
     get_tts(input())
 
