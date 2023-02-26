@@ -33,11 +33,11 @@ int main(int argc, char* argv[])
     tty.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
     // tty.c_oflag &= ~OXTABS; // Prevent conversion of tabs to spaces (NOT PRESENT IN LINUX)
     // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT IN LINUX)
-    tty.c_cc[VTIME] = 10;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
-    tty.c_cc[VMIN] = 0;
+    tty.c_cc[VTIME] = 100;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
+    tty.c_cc[VMIN] = 255;
     // Set in/out baud rate to be 9600
-    cfsetispeed(&tty, B9600);
-    cfsetospeed(&tty, B9600);
+    cfsetispeed(&tty, B115200);
+    cfsetospeed(&tty, B115200);
 
     // Save tty settings, also checking for error
     if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
@@ -45,17 +45,27 @@ int main(int argc, char* argv[])
     }
 
     // Allocate memory for read buffer, set size according to your needs
-    char read_buf [256];
+    short read_buf[256] = { 0 };
+    short final_read[115200] = { 0 };
+    int cursor = 0; 
 
     // Read bytes. The behaviour of read() (e.g. does it block?,
     // how long does it block for?) depends on the configuration
     // settings above, specifically VMIN and VTIME
-    int n = read(serial_port, &read_buf, sizeof(read_buf));
+    int n, i;
 
-    while(1)
+    while(cursor < (115200 - 256))
     {
         n = read(serial_port, &read_buf, sizeof(read_buf));
-        printf("%s", read_buf);
+
+        for(i=0; i < cursor+n; i++)
+            final_read[i+cursor] = read_buf[i];
+        
+        cursor += n; 
     }
+
+    write_wav("test.wav", n, final_read, 115200);
+    
+    close(serial_port);
 
 }
