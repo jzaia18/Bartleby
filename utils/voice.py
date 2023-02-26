@@ -3,36 +3,38 @@
 # Module for google cloud speech to text
 
 import speech_recognition as sr
-from scipy.io.wavfile import write
+#from scipy.io.wavfile import write
 import sounddevice as sd
 from time import sleep
 import wavio as wv
+import concurrent.futures
 
 FS = 44100
+# Initialize the recognizer
+r = sr.Recognizer()
+
 
 # For testing
 def record_audio(duration, verbose=False):
-    fs = FS  # Sample rate
     seconds = duration  # Duration of recording
     if verbose:
         print('recording!')
-    myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2)
+    myrecording = sd.rec(int(seconds * FS), samplerate=FS, channels=2)
     sd.wait()  # Wait until recording is finished
     if verbose:
         print('finished')
-    #write('output.wav', fs, myrecording)  # Save as WAV file
-    wv.write("recording1.wav", myrecording, fs, sampwidth=4)
+    #write('output.wav', FS, myrecording)  # Save as WAV file
+    wv.write("recording1.wav", myrecording, FS, sampwidth=4)
     sleep(1)
 
 
 def wait_for_wake(wakeWords, duration, verbose=False):
-    fs = FS
     if verbose:
         print("Waiting for Wake")
     
-    recordingCache = sd.rec(int(duration * fs), samplerate=fs, channels=2)
+    recordingCache = sd.rec(int(duration * FS), samplerate=FS, channels=2)
     sd.wait()
-    wv.write("recordingCache.wav", recordingCache, fs, sampwidth=4)
+    wv.write("recordingCache.wav", recordingCache, FS, sampwidth=4)
     response = convert_wav_to_text(fname="recordingCache.wav")
     
     if(response):
@@ -49,8 +51,6 @@ def wait_for_wake(wakeWords, duration, verbose=False):
 # Reading Audio file as source
 # listening the audio file and store in audio_text variable
 def convert_wav_to_text(fname='recording1.wav', verbose=False):
-    # Initialize the recognizer
-    r = sr.Recognizer()
     with sr.AudioFile(fname) as source:
         audio_text = r.listen(source)
         # recoginize_() method will throw a request error if the API is unreachable, hence using exception handling
@@ -72,8 +72,8 @@ if __name__ == '__main__':
     wakeWords = ["bartleby", "hey", "servant"]
 
     while(True):
-        if(wait_for_wake(wakeWords, 3, verbose=True) == 0):
-            record_audio(15, verbose=True)
-            print(convert_wav_to_text(verbose=True))
+        if(wait_for_wake(wakeWords, 1) == 0):
+            record_audio(8)
+            print(convert_wav_to_text())
         else:
-            sleep(.1)
+            sleep(.05)
