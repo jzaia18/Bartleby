@@ -14,11 +14,13 @@ if __name__ == '__main__':
     # text = convert_wav_to_text()
     # print('Q:',text)
 
+    preface = ""
     text = input("> ")
     
     if (match := re.search(WEATHER_PATTERN, text)):
-        text = forecastFromLocation(match.group(1) or 'Rochester, NY')
-        print("Weather forecast:", repr(text))
+        preface = "Current forecast: " + forecastFromLocation(match.group(1) or 'Rochester, NY')
+        text = "Tell me about the weather"
+        print("Weather forecast:", repr(preface))
     
 
     response = get_moderated_text(text)
