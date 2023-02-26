@@ -30,7 +30,7 @@ if __name__ == '__main__':
             context = "Do not respond."
         else:
             details = getDetails(forecastObj)
-            context = "Exaggerate the following, using exact numbers: " + details
+            context = "Embellish the following, using exact numbers: " + details
             # text = "Comment strongly about the weather."
             
             if getPrecipChance(forecastObj) >= 90:
